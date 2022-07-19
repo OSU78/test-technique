@@ -2,7 +2,7 @@
 
 
 ### COMMENT INSTALLER 😀
- Une fois le projet telechager , lancé le fichier test-technique.html dans votre navigateur pour tester le site !
+ Une fois le projet telechager , lancé le fichier index.html dans votre navigateur pour tester le site !
  
  >Ou juste 
 [voir le site directement ici](https://test-technique-bay.vercel.app) 
