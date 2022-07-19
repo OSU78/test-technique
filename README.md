@@ -14,7 +14,9 @@
 
 ### ARCHITECTURE DU PROJET🧩
 ```
-Test-TECHNIQUE-N25
+Test-TECHNIQUE
+└ASSETS
+└───favicon16*16.ico
 └CSS
 └───style.css
 └JS  
