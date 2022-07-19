@@ -22,8 +22,8 @@ Test-TECHNIQUE
 └JS  
 └───function.js
 └README.md
-└test.technique.html
-└test.technique.py
+└index.html
+└test-technique.py
     
 ```
 
