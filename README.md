@@ -4,7 +4,7 @@
  Une fois le projet telechager , lancé le fichier test-technique.html dans votre navigateur pour tester le site !
  
  >Ou juste 
-[voir le site directement ici](https://nodejs.org/) 
+[voir le site directement ici](https://test-technique-bay.vercel.app) 
 
 
 ### INFO UTILE✨
