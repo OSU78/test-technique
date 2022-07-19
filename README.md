@@ -1,5 +1,6 @@
 # TEST TECHNIQUE 👾 
 
+
 ### COMMENT INSTALLER 😀
  Une fois le projet telechager , lancé le fichier test-technique.html dans votre navigateur pour tester le site !
  
@@ -8,7 +9,7 @@
 
 
 ### INFO UTILE✨
- Pour lancé le scripts python dans le navigateur j'ai choisi d'utilisé **PYODIDE** (Une librairie qui permet d'exécuté du python dans le navigateur facilement et rapidement)
+ Pour lancé le script python dans le navigateur j'ai choisi d'utilisé **PYODIDE** (Une librairie qui permet d'exécuté du python dans le navigateur facilement et rapidement)
  .Il permet également d’installer et d’exécuter des paquets Python dans le navigateur.
 
 
