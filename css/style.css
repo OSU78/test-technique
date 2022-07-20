@@ -1,22 +1,47 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-  }
-  body {
-    color: white;
-    min-height: 95vh;
-    background: #11141d;
-  }
-  h1 {
-    font-family: "Anton";
-    font-size: 35px;
-    font-weight: 100;
-    text-shadow: 0px 0px 8px #ffc8006a;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+
+body {
+  color: white;
+  min-height: 95vh;
+  background: #11141d;
+}
+
+h1 {
+  font-family: "Anton";
+  font-size: 35px;
+  font-weight: 100;
+  text-shadow: 0px 0px 8px #ffc8006a;
+}
+
+
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #ffc800 #0e021d;
   }
 
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #ffc800;
+  }
 /*CSS ID*/
-#simulateur,.boxDesign {
+#simulateur,
+.boxDesign {
   border-radius: 8px;
   padding: 15px;
   background: #58560d3d;
@@ -43,88 +68,143 @@
   border-radius: 5px;
   transition: all 0.15s;
 }
+
 /* fin CSS ID*/
 
 
 /*CSS CLASS*/
-  .customP {
-    font-size: 17px;
-    text-shadow: 0px 0px 8px #ffc8006a;
-    font-family: "Anton";
-  }
-  [contenteditable] {
-    padding: 5px;
-  }
-  [contenteditable]:focus {
-    outline: 1px solid #ffd5004b;
-
-    border-radius: 8px;
-    padding: 5px;
-  }
-  .gap5 {
-    gap: 5px;
-  }
-  .gap15{
-    gap: 15px;
-  }
-  .mgTopBottom55 {
-    margin: 25px 0px;
-  }
-  .mg20 {
-    margin: 20px;
-  }
-  .flex {
-    display: flex;
-    gap: 5px;
-  }
-  .center {
-    align-items: center;
-    justify-content: center;
-  }
-  .baseline {
-    align-items: baseline;
-  }
-  .ftSize50 {
-    font-size: 60px;
-  }
-  .width100 {
-    width: max-content;
-  }
-  .fullWidth {
-    width: -webkit-fill-available;
-    text-align: center;
-  }
-  .column {
-    flex-direction: column;
-  }
-  .secondaryColor {
-    color: #bab49a4f;
-  }
-  .row {
-    flex-direction: row;
-  }
-  .mgBottom {
-    margin-bottom: 50px;
-  }
-  .mgBottom30 {
-    margin-bottom: 30px;
-  }
-
-  .mgTop25{
-    margin-top: 25px;
-  }
-  .arrayPose p {
-    
-    border-radius: 4px;
-    background: #ffc800b8;
-    color: black;
-    height: 20px;
-    width: 100px;
-    padding: 5px;
-    min-width: max-content;
-    text-align: center;
+.customP {
+  font-size: 17px;
+  text-shadow: 0px 0px 8px #ffc8006a;
+  font-family: "Anton";
 }
-#content aside{
+
+[contenteditable] {
+  padding: 5px;
+}
+
+[contenteditable]:focus {
+  outline: 1px solid #ffd5004b;
+
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.gap5 {
+  gap: 5px;
+}
+
+.gap15 {
+  gap: 15px;
+}
+
+.mgTopBottom55 {
+  margin: 25px 0px;
+}
+
+.mg20 {
+  margin: 20px;
+}
+
+.flex {
+  display: flex;
+  gap: 5px;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.baseline {
+  align-items: baseline;
+}
+
+.ftSize50 {
+  font-size: 60px;
+}
+
+.width100 {
+  width: max-content;
+}
+
+.fullWidth {
+  width: -webkit-fill-available;
+  width: -moz-available; 
+  width: fill-available;
+  text-align: center;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.secondaryColor {
+  color: #bab49a4f;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.mgBottom {
+  margin-bottom: 50px;
+}
+
+.mgBottom30 {
+  margin-bottom: 30px;
+}
+
+.mgTop25 {
+  margin-top: 25px;
+}
+
+.absolute {
+  position: relative
+}
+
+.opacite1 {
+  opacity: 0.8;
+}
+
+.opacite2 {
+  opacity: 0.5;
+}
+
+.opacite3 {
+  opacity: 0.3;
+}
+
+.opacite4 {
+  opacity: 0.05;
+}
+
+.opacite5 {
+  opacity: 0.1;
+}
+
+.opacite6 {
+  opacity: 0.2;
+}
+
+
+.opacite7 {
+  opacity: 0.4;
+}
+
+.arrayPose p {
+
+  border-radius: 4px;
+  background: #ffc800b8;
+  color: black;
+  height: 20px;
+  width: 100px;
+  padding: 5px;
+  min-width: max-content;
+  text-align: center;
+}
+
+#content aside {
   height: fit-content;
   width: 100px;
   padding: 5px;
@@ -132,69 +212,120 @@
   min-width: max-content;
 
 }
+#content{
+  max-height: 200px;
+  overflow: auto;
+  transition: all 0.3s;
+}
+
+
+.voirPlus {
+
+  background: #ffc800;
+  color: black;
+  height: 20px;
+  padding: 5px;
+  min-width: max-content;
+  text-align: center;
+  border-radius: 4px;
+  box-shadow: 1px 0px 10px #ffc8004a, 1px 0px 10px #ffc8005e;
+  position: relative;
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.voirPlus::before {
+  content: "Reserver au VIP";
+  display: block;
+  position: absolute;
+  text-align: center;
+  top: -38px;
+  font-size: 20px;
+  font-weight: 100;
+  text-transform: uppercase;
+  left: 32%;
+  color: #bebebe2e;
+  font-family: "Anton";
+  letter-spacing: 7px;
+}
+
+
 
 /* fin CSS CLASS*/
 
 
-  /*CSS DES INPUTS*/
-  input[type="range"] {
-    -webkit-appearance: none;
-    margin-right: 15px;
-    width: 80%;
-    height: 13px;
-    background: rgb(196 149 15 / 14%);
-    border: 1px solid rgba(196, 148, 15, 0.348);
-    border-radius: 5px;
-    background-image: linear-gradient(#ffdd00, #ffc800);
-    background-size: 70% 100%;
-    background-size: 5% 100%;
-    background-repeat: no-repeat;
-  }
+/*CSS DES INPUTS*/
+input[type="range"] {
+  -webkit-appearance: none;
+  margin-right: 15px;
+  width: 80%;
+  height: 13px;
+  background: rgb(196 149 15 / 14%);
+  border: 1px solid rgba(196, 148, 15, 0.348);
+  border-radius: 5px;
+  background-image: linear-gradient(#ffdd00, #ffc800);
+  background-size: 70% 100%;
+  background-size: 5% 100%;
+  background-repeat: no-repeat;
+}
 
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    background: #ffd500;
-    cursor: pointer;
-    box-shadow: 0 0 2px 0 #555;
-    transition: background 0.3s ease-in-out;
-  }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  background: #ffd500;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 #555;
+  transition: background 0.3s ease-in-out;
+}
 
-  input[type="range"]::-webkit-slider-runnable-track {
-    -webkit-appearance: none;
-    box-shadow: none;
-    border: none;
-    background: transparent;
-  }
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
 
 /* fin css inputs */
 
 
 
 /* CSS MEDIA QUERY */
-  @media (max-width: 600px) {
-    #simulateur,.boxDesign {
-      width: fit-content;
-    }
-    .ftSize {
-      font-size: 25px;
-    }
-   
+@media (max-width: 600px) {
+
+  #simulateur,
+  .boxDesign {
+    width: fit-content;
   }
 
-  @media (max-width: 740px) {
-    .responsive{
-      font-size: 12px;
-      max-width: 400px;
-    }
-   
+  .ftSize {
+    font-size: 25px;
+  }
+ 
+
+}
+
+@media (max-width: 740px) {
+  .responsive {
+    font-size: 12px;
+    max-width: 400px;
+  }
+  .voirPlus::before{
+    left: 24%;
   }
 
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
   .responsive {
     font-size: 13px;
     max-width: 330px;
-}
   }
+  .voirPlus::before {
+    content: "Reserver au VIP";
+    font-size: 15px;
+    left: 27%;
+    letter-spacing: 4px;
+}
+}
