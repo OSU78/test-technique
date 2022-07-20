@@ -37,7 +37,7 @@
           </div>
 
           <div style="position: relative">
-            <span id="empruntValue"></span>
+            <span id="empruntValue" contenteditable="true" ></span>
             <input type="range" class="range ifChange" id="emprunt" name="emprunt" min="1000" max="400000" value="10000" step="1000"/>
           </div>
         </section>
@@ -79,26 +79,71 @@
 
 
       </section>
-
+      <section  class="boxDesign width100 mgTop25 responsive">
+        <div class="flex center row arrayPose fullWidth">
+          <p>Date</p>
+          <p>Mensualité</p>
+          <p>CP amortis</p>
+          <p>Interêts</p>
+          <p>CP Restants</p>
+        </div>
+        <div id="content" class="flex column gap15">
+           
+        </div>
+       
+      </section>
     </main>
 
 <script src="./js/function.js"></script>
     <script>
-
+      var tabPeriode = [];
+      function createView(tableau){
+        document.getElementById("content").innerHTML="";
+        for(i=0;i<tableau.length;i++){
+        
+        document.getElementById("content").innerHTML += `
+        <div class="flex center row fullWidth responsive">
+        <aside>${tableau[i][0]}</aside>
+          <aside>${tableau[i][1]}€</aside>
+          <aside>${tableau[i][2]}€</aside>
+          <aside>${tableau[i][3]}€</aside>
+          <aside>${addSpace(Math.round(tableau[i][4] * 100) / 100)}€</aside>
+        </div>
+        `;
+      }
+      }
+      function toto(data){
+          //console.table(data);
+          createView(data);
+          //document.getElementById("content").innerHTML = date;
+        }
       async function main() {
         let pyodide = await loadPyodide();
+       await pyodide.loadPackage("numpy");
+       await pyodide.loadPackage("pandas");
+       await pyodide.loadPackage("micropip");
         console.log(
           pyodide.runPython(`
             import sys
             sys.version
         `)
         );
+       
         console.log(
-          pyodide.runPython(`
+          await pyodide.runPythonAsync(`
             import js
-
+            
+            from pyodide import to_js
+            import numpy as np 
+            import pandas as pd
+            import micropip
+            await micropip.install('numpy_financial')
+            await micropip.install('tabulate')
+            from tabulate import tabulate
+            import numpy_financial
+            print(sys.version_info)
             mensualiteDiv=js.document.getElementById("mensualite")
-
+            tab=["5","5"];
                     
             #Fonction qui calcule le montant total des intérêts versés en fonction du montant du crédit et du taux d'intérêt annuel
             #Prend trois paramètre : (Montant-emprêter,Taux-annuel,Durée-en-années,Assurance-en-%)
@@ -113,10 +158,51 @@
                     #print("Votre mensualité sera de {0:.2f} euros".format(M))
                     mensualiteDiv.innerText=("{0:.0f}€".format(M))
                     I = N * M - C # calcul des intérêts versés
-                    T2 = T*1/100	# calcul du taux d'assurance		
+                    T2 = T*1/100	# calcul du taux d'assurance	
+                    rng = pd.date_range("01-01-2021", periods=N, freq='MS')
+                    rng.name = "Date"
+                    df = pd.DataFrame(index=rng, columns=['Mensualité', 'Capital Amorti', 'Intérêts', 'Capital restant dû'], dtype='float')
+                    df.reset_index(inplace=True)
+                    df.index += 1
+                    df.index.name = "Periode (Mois)"
+
+                    df["Mensualité"] = -1 * numpy_financial.pmt(T2/12, N, C)+ C*((ASSU/100)/12)
+                    df["Capital Amorti"] = -1 * numpy_financial.ppmt(T2/12,df.index,N, C)
+                    df["Intérêts"] = -1 * numpy_financial.ipmt(T2/12,df.index, N, C) 
+                    df = df.round(2)
+
+                    df["Capital restant dû"] = 0
+                    df.loc[1, "Capital restant dû"] = C - df.loc[1, "Capital Amorti"]
+
+                    for period in range(2, len(df)+1):
+                        previous_balance = df.loc[period-1, "Capital restant dû"]
+                        principal_paid = df.loc[period, "Capital Amorti"]
+                        
+                        if previous_balance == 0:
+                            df.loc[period, ["Mensualité", 'Capital Amorti', "Intérêts", "Capital restant dû"]] == 0
+                            continue
+                        elif principal_paid <= previous_balance:
+                            df.loc[period, "Capital restant dû"] = previous_balance - principal_paid
+                    
+                    df["Date"] = pd.to_datetime(df["Date"],format='%d-%m-%Y')
+                    #print(tabulate(df))	# affichage du résultat dans un tableau
+                   
+                   
+                    #period,mensualité,capAmorti,interet,capRestant,duree
+                    data=df.to_numpy()
+                    tab=[]
+                    for i in range(0,len(data)):
+                      tab.append((data[i][0].strftime("%m/%d/%Y"),data[i][1],data[i][2],data[i][3],data[i][4]) )
+                    
+                    #print(tab)
+
+                    js.toto(to_js(tab))
+                    
+                    
         `)
         );
-
+console.table(pyodide.globals.get('tab') )
+       
 
         let ifChange= document.querySelectorAll(".ifChange");
         /* On crée une boucle qui va parcourir les inputs pour verifier si un input change de valeur*/
@@ -129,7 +215,7 @@
           console.log(emprunt,durer,tauxInteret,tauxAssurance);
           
           //On appelle la fonction qui calcule la mensualité
-          pyodide.runPython(`CalculerMensualité(${emprunt},${durer},${tauxInteret},${tauxAssurance})`)
+          tabPeriode=pyodide.runPython(`CalculerMensualité(${emprunt},${durer},${tauxInteret},${tauxAssurance})`)
           // pyodide.runPython(`CalculerMensualité(50000,5,1.64,0.34)`)
         })
       }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Test-technique - Ousmane Salamatao</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
+    <!-- SCRIPT PYODIDE pour executé le pyhton dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+  </head>
+
+  <body class="flex center">
+    <main class="flex center column mg55">
+    <!-- SECTION 1 / Mensualité -->
+      <section>
+        <div class="flex center row gap5 baseline">
+          <h1 id="mensualite" class="mgTopBottom55 ftSize50">0€</h1>
+          <span>/mois</span>
+        </div>
+      </section>
+
+      <!-- SECTION 2 / SECTION REGROUPANT LES INPUTS -->
+      <section class="flex center column" id="simulateur">
+        <h1 class="width100 ftSize">
+          Calcul des mensualités <br />de votre prêt immobilier
+        </h1>
+
+        <!-- MONTANT DU PRET -->
+        <section class="fullWidth mgBottom30">
+          <div>
+            <p class="secondaryColor">Montant de votre prêt</p>
+          </div>
+
+          <div style="position: relative">
+            <span id="empruntValue"></span>
+            <input type="range" class="range ifChange" id="emprunt" name="emprunt" min="1000" max="400000" value="10000" step="1000"/>
+          </div>
+        </section>
+
+        <!-- DUREE DE REMBOURSEMENT -->
+        <section class="fullWidth mgBottom30">
+          <div>
+            <p class="secondaryColor">Durée de votre prêt</p>
+          </div>
+
+          <div style="position: relative">
+            <span id="durerValue"></span>
+            <input type="range" class="range ifChange" name="durer" id="durer" min="1" max="30" value="1" step="1"/>
+          </div>
+        </section>
+
+        <!-- TAUX D'INTERET -->
+        <section class="flex center column">
+          <div class="flex center row">
+            <p class="secondaryColor">Taux d'intérêt :</p>
+            <div class="flex center row baseline">
+              <p id="tauxInteret" class="customP ifChange" contenteditable="true" >
+                1.64
+              </p>
+              <p>%</p>
+            </div>
+          </div>
+
+          <div class="flex center row">
+            <p class="secondaryColor">Taux d'assurance :</p>
+            <div class="flex center row baseline">
+              <p id="tauxAssurance" class="customP ifChange" contenteditable="true">
+                0.34
+              </p>
+              <p>%</p>
+            </div>
+          </div>
+        </section>
+
+
+      </section>
+
+    </main>
+
+<script src="./js/function.js"></script>
+    <script>
+var tos=5
+      async function main() {
+        let tos=5
+        let pyodide = await loadPyodide();
+      //  await pyodide.loadPackage("numpy");
+      //  await pyodide.loadPackage("pandas");
+       await pyodide.loadPackage("micropip");
+        console.log(
+          pyodide.runPython(`
+            import sys
+            sys.version
+        `)
+        );
+        console.log(
+          await pyodide.runPythonAsync(`
+        import micropip
+        tab=[1,2]
+        oppo=1547
+        await micropip.install('numpy_financial')
+        await micropip.install('tabulate')
+        import numpy_financial
+        from tabulate import tabulate
+        print(tabulate([['Alice', 24], ['Bob', 19]], headers=['Name', 'Age']))
+        
+      `)
+      
+        );
+      
+       // tos=await pyodide.globals.get('tab') 
+        //console.log(tos)
+
+
+        let ifChange= document.querySelectorAll(".ifChange");
+        /* On crée une boucle qui va parcourir les inputs pour verifier si un input change de valeur*/
+        for(i=0;i<ifChange.length;i++){
+       ifChange[i].addEventListener("input",()=>{
+          emprunt = parseInt(document.getElementById("emprunt").value);
+          durer = parseInt(document.getElementById("durer").value);
+          tauxInteret = parseFloat(document.getElementById("tauxInteret").innerText);
+          tauxAssurance = parseFloat(document.getElementById("tauxAssurance").innerText);
+          console.log(emprunt,durer,tauxInteret,tauxAssurance);
+          
+          //On appelle la fonction qui calcule la mensualité
+          pyodide.runPython(`CalculerMensualité(${emprunt},${durer},${tauxInteret},${tauxAssurance})`)
+          // pyodide.runPython(`CalculerMensualité(50000,5,1.64,0.34)`)
+        })
+      }
+      }
+      main();
+    </script>
+
+  </body>
+</html>
