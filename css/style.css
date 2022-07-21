@@ -56,7 +56,7 @@ h1 {
     0 10px 100px -3px rgb(233 217 0 / 16%);
 }
 
-#empruntValue {
+#empruntValue,#durerValue {
   visibility: hidden;
   position: absolute;
   width: max-content;
@@ -192,6 +192,66 @@ h1 {
   opacity: 0.4;
 }
 
+/* cree un css d'une div qui prend tout la ampleur de la page */
+
+  #loading {
+      width: -webkit-fill-available;
+      width: -moz-available; 
+      width: fill-available;
+      text-align: center;
+      height: -webkit-fill-available ;
+      height: -moz-available;
+      height: fill-available;
+     
+    }
+    
+.loadText{
+animation: loadAnime 1.5s ;
+animation-iteration-count: infinite;
+transition: 0.8s;
+text-shadow: 0px 0px 0px transparent;
+}
+.loadText::after {
+  content: "chargement...";
+  display: block;
+  color: rgba(255, 255, 255, 0.578);
+  animation: tutoriel 10s infinite;
+  font-size: 17px;
+  font-family: sans-serif;
+  font-weight: 100;
+}
+@keyframes loadAnime {
+  0%{
+    opacity: 1;
+    text-shadow: 0px 0px 8px #ffc800af;
+  }
+  50%{
+    opacity: 0.3;
+   
+  }
+  100%{
+    opacity: 1;
+    text-shadow: 0px 0px 8px #ffc800af;
+  }
+  
+}
+@keyframes tutoriel {
+  0%{
+    content: "Chargement de python dans le navigateur...";
+  }
+  70%{
+   content: "Chargement des dépendances (numpy,numpy_financial,pandas)...";
+   
+  }
+ 
+  85%{
+    content: "Un petit peut de patience😌";
+  }
+  
+}
+.main{
+  display: none;
+}
 .arrayPose p {
 
   border-radius: 4px;

@@ -6,29 +6,20 @@
     <title>Test-technique - Ousmane Salamatao</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./assets/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="./assets/favicon-16x16.png"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png"/>
     <!-- SCRIPT PYODIDE pour executé le pyhton dans le navigateur -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
   </head>
 
   <body class="flex center">
-    <main class="flex center column mg55">
+    <div id="loading">
+      <h1 class="loadText">CHARGEMENT...</h1>
+      
+    </div>
+    <main class="flex center column mg55 main">
       <!-- SECTION 1 / Mensualité -->
       <section>
         <div class="flex center row gap5 baseline">
@@ -50,17 +41,8 @@
           </div>
 
           <div style="position: relative">
-            <span id="empruntValue" contenteditable="true"></span>
-            <input
-              type="range"
-              class="range ifChange"
-              id="emprunt"
-              name="emprunt"
-              min="1000"
-              max="400000"
-              value="10000"
-              step="1000"
-            />
+            <span id="empruntValue" class="ifChange" contenteditable="true"></span>
+            <input type="range" class="range ifChange" id="emprunt" name="emprunt" min="1000" max="400000" value="10000" step="1000" />
           </div>
         </section>
 
@@ -71,17 +53,8 @@
           </div>
 
           <div style="position: relative">
-            <span id="durerValue"></span>
-            <input
-              type="range"
-              class="range ifChange"
-              name="durer"
-              id="durer"
-              min="1"
-              max="30"
-              value="1"
-              step="1"
-            />
+            <span id="durerValue" class="ifChange" contenteditable="true" ></span>
+            <input type="range" class="range ifChange" name="durer" id="durer" min="1" max="30" value="1" step="1" />
           </div>
         </section>
 
@@ -90,11 +63,7 @@
           <div class="flex center row">
             <p class="secondaryColor">Taux d'intérêt :</p>
             <div class="flex center row baseline">
-              <p
-                id="tauxInteret"
-                class="customP ifChange"
-                contenteditable="true"
-              >
+              <p id="tauxInteret" class="customP ifChange" contenteditable="true" >
                 1.64
               </p>
               <p>%</p>
@@ -104,11 +73,7 @@
           <div class="flex center row">
             <p class="secondaryColor">Taux d'assurance :</p>
             <div class="flex center row baseline">
-              <p
-                id="tauxAssurance"
-                class="customP ifChange"
-                contenteditable="true"
-              >
+              <p id="tauxAssurance" class="customP ifChange" contenteditable="true" >
                 0.34
               </p>
               <p>%</p>
@@ -133,70 +98,28 @@
     <script>
       var tabPeriode = [];
 
-      document.querySelector(".voirPlus").addEventListener("click", () => {
-        document.getElementById("content").style = "max-height:1000px";
-        var op = document.querySelectorAll(".opacite");
-        for (let i = 0; i < op.length; i++) {
-          op[i].style = "opacity:1";
-        }
-      });
-      function createView(tableau) {
-        document.getElementById("content").innerHTML = "";
-        let opacite = 1;
-        for (i = 0; i < tableau.length; i++) {
-          if (i > 1 && i < 10) {
-            document.querySelector(".voirPlus").style = "visibility:visible";
-            document.getElementById("content").innerHTML += `
-        <div class="flex center row fullWidth responsive opacite${opacite} opacite">
-        <aside>${tableau[i][0]}</aside>
-          <aside>${tableau[i][1]}€</aside>
-          <aside>${tableau[i][2]}€</aside>
-          <aside>${tableau[i][3]}€</aside>
-          <aside>${addSpace(Math.round(tableau[i][4] * 100) / 100)}€</aside>
-        </div>`;
-            opacite++;
-          } else {
-            document.getElementById("content").innerHTML += `
-        <div class="flex center row fullWidth responsive">
-        <aside>${tableau[i][0]}</aside>
-          <aside>${tableau[i][1]}€</aside>
-          <aside>${tableau[i][2]}€</aside>
-          <aside>${tableau[i][3]}€</aside>
-          <aside>${addSpace(Math.round(tableau[i][4] * 100) / 100)}€</aside>
-        </div>
-        `;
-          }
-        }
-      }
-      function toto(data) {
-        //console.table(data);
-        createView(data);
-        //document.getElementById("content").innerHTML = date;
-      }
       async function main() {
         let pyodide = await loadPyodide();
         await pyodide.loadPackage("numpy");
         await pyodide.loadPackage("pandas");
         await pyodide.loadPackage("micropip");
-        console.log(
-          pyodide.runPython(`
-            import sys
-            sys.version
-        `)
-        );
 
-        console.log(
-          await pyodide.runPythonAsync(`
+        let importationLibrairie = await pyodide.runPythonAsync(`
+            import sys
             import js
-            
+            import micropip
+            await micropip.install('tabulate')
+            await micropip.install('numpy_financial')
             from pyodide import to_js
             import numpy as np 
             import pandas as pd
-            import micropip
-            await micropip.install('numpy_financial')
-            await micropip.install('tabulate')
             from tabulate import tabulate
             import numpy_financial
+            sys.version
+        `);
+
+        let scriptPython = await pyodide.runPythonAsync(`
+            
             print(sys.version_info)
             mensualiteDiv=js.document.getElementById("mensualite")
             tab=["5","5"];
@@ -251,26 +174,25 @@
                       tab.append((data[i][0].strftime("%m/%d/%Y"),data[i][1],data[i][2],data[i][3],data[i][4]) )
                     
                     #print(tab)
-
-                    js.toto(to_js(tab))
+                    #On appel la fonction js qui permet de créer le tableau en html
+                    js.createView(to_js(tab))
                     
                     
-        `)
-        );
-        console.table(pyodide.globals.get("tab"));
+        `);
 
+        finishLoad();
+        //document.documentElement.requestFullscreen({ navigationUI: "show" })
+        /*DEBUT CONTROLE de l'interaction avec les input sur le front */
         let ifChange = document.querySelectorAll(".ifChange");
         /* On crée une boucle qui va parcourir les inputs pour verifier si un input change de valeur*/
         for (i = 0; i < ifChange.length; i++) {
           ifChange[i].addEventListener("input", () => {
-            emprunt = parseInt(document.getElementById("emprunt").value);
-            durer = parseInt(document.getElementById("durer").value);
-            tauxInteret = parseFloat(
-              document.getElementById("tauxInteret").innerText
-            );
-            tauxAssurance = parseFloat(
-              document.getElementById("tauxAssurance").innerText
-            );
+            /* On crée une variable qui va stocker la valeur des inputs emprunt durer et tauxInteret*/
+            emprunt = parseInt(getValue("emprunt"))>0 && parseInt(getValue("emprunt"))<=400000 ? getValue("emprunt") : 1000
+            durer = parseInt(getValue("durer"))>0 && parseInt(getValue("durer"))<=30 ? getValue("durer") : 1
+            tauxInteret = parseFloat(document.getElementById("tauxInteret").innerText);
+            tauxAssurance = parseFloat(document.getElementById("tauxAssurance").innerText);
+            
             console.log(emprunt, durer, tauxInteret, tauxAssurance);
 
             //On appelle la fonction qui calcule la mensualité
@@ -280,6 +202,7 @@
             // pyodide.runPython(`CalculerMensualité(50000,5,1.64,0.34)`)
           });
         }
+        /*FIN CONTROLE de l'interaction avec les input sur le front */
       }
       main();
     </script>
